@@ -1,58 +1,141 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🛠️ PubFix – Online Handyman Hiring System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+PubFix is a web-based platform designed to connect customers with skilled and reliable handymen. It allows users to find service providers, submit job requests, manage bookings, and share reviews and ratings.
 
-## About Laravel
+The main goal of PubFix is to make hiring handyman services easier, faster, and more convenient through a centralized online platform.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Key Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **User Management** – Manage user accounts and profiles.
+- **Worker Management** – Manage handyman profiles and service details.
+- **Booking & Job Requests** – Allow customers to request services and manage bookings.
+- **Reviews & Ratings** – Enable customers to provide feedback and rate completed services.
+- **Role-Based Access** – Support different user roles and permissions.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🧰 Technologies Used
 
-## Learning Laravel
+| Technology | Purpose |
+|---|---|
+| PHP | Backend development |
+| Laravel | Backend framework |
+| PostgreSQL | Database management |
+| HTML | Web page structure |
+| CSS | Styling |
+| JavaScript | Frontend interactivity |
+| Git & GitHub | Version control and collaboration |
+| DBeaver | Database management |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📂 Project Structure
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```text
+PubFix/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   ├── Middleware/
+│   ├── Models/
+│   └── Services/
+├── bootstrap/
+├── config/
+├── database/
+│   ├── migrations/
+│   └── seeders/
+├── public/
+├── resources/
+│   ├── css/
+│   ├── js/
+│   └── views/
+├── routes/
+│   └── web.php
+├── storage/
+├── tests/
+├── .env.example
+└── README.md
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## ⚙️ Installation & Setup
 
-## Contributing
+### 1. Clone the Repository
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+git clone <YOUR_REPOSITORY_URL>
+cd PubFix
+```
 
-## Code of Conduct
+### 2. Install PHP Dependencies
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+composer install
+```
 
-## Security Vulnerabilities
+### 3. Create Environment File
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+cp .env.example .env
+```
 
-## License
+Update the database configuration in the `.env` file:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=pubfix_db
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+Create the PostgreSQL database before running migrations.
+
+### 4. Generate Application Key
+
+```bash
+php artisan key:generate
+```
+
+### 5. Run Database Migrations
+
+```bash
+php artisan migrate
+```
+
+### 6. Start the Development Server
+
+```bash
+php artisan serve
+```
+
+Open the application in your browser:
+
+```text
+http://127.0.0.1:8000
+```
+
+## 👥 Development Team
+
+This project is developed collaboratively by a team of four developers.
+
+| Module | Responsibility |
+|---|---|
+| Reviews & Ratings | Customer feedback and rating management |
+| Worker Management | Handyman profile and service management |
+| User Management | User accounts and profile management |
+| Booking & Job Requests | Service booking and job request management |
+
+## 🔄 Version Control
+
+Git and GitHub are used to manage source code, track changes, and support team collaboration.
+
+Each developer works on their assigned module using separate branches and contributes changes through pull requests.
+
+## 🎯 Project Objective
+
+To develop a reliable and user-friendly online platform that simplifies the process of finding, hiring, and managing handyman services.
+
+---
+
+**Project Name:** PubFix  
+**Project Type:** Web Application  
+**Backend Framework:** Laravel  
+**Database:** PostgreSQL  
+**Development Status:** In Progress
