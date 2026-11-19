@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enums\BookingStatus;
 use App\Enums\UserRole;
 use App\Models\Booking;
+use App\Models\Category;
 use App\Models\Handyman;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -199,6 +200,63 @@ class WorkerWorkspaceTest extends TestCase
 
         $passwordResponse->assertRedirect();
         $this->assertTrue(Hash::check('new-worker-password', $handyman->user->fresh()->password));
+    }
+
+    public function test_worker_registration_creates_a_handyman_account_and_profile(): void
+    {
+        $category = Category::factory()->create();
+
+        $response = $this->post(route('worker.register'), [
+            'first_name' => 'Morgan',
+            'last_name' => 'Lee',
+            'email' => 'morgan.worker@example.com',
+            'password' => 'worker123',
+            'password_confirmation' => 'worker123',
+            'zip_code' => '78704',
+            'city' => 'Austin, TX',
+            'category_id' => $category->id,
+            'hourly_rate' => 60,
+            'terms' => 'on',
+        ]);
+
+        $response->assertRedirect(route('worker.sign-in'));
+        $user = User::where('email', 'morgan.worker@example.com')->firstOrFail();
+        $this->assertSame(UserRole::Handyman, $user->role);
+        $this->assertDatabaseHas('handymen', [
+            'user_id' => $user->id,
+            'category_id' => $category->id,
+            'city' => 'Austin, TX',
+        ]);
+    }
+
+    public function test_worker_login_rejects_customer_accounts_and_accepts_worker_accounts(): void
+    {
+        $customer = User::factory()->create(['email' => 'customer-login@example.com']);
+        $worker = Handyman::factory()->create();
+
+        $customerResponse = $this->post(route('worker.login'), [
+            'email' => $customer->email,
+            'password' => 'password',
+        ]);
+        $customerResponse->assertRedirect()->assertSessionHasErrors('email');
+        $this->assertGuest();
+
+        $workerResponse = $this->post(route('worker.login'), [
+            'email' => $worker->user->email,
+            'password' => 'password',
+        ]);
+        $workerResponse->assertRedirect(route('worker.dashboard'));
+        $this->assertAuthenticatedAs($worker->user);
+    }
+
+    public function test_worker_can_logout_through_the_shared_logout_route(): void
+    {
+        $worker = Handyman::factory()->create();
+
+        $response = $this->actingAs($worker->user)->post(route('logout'));
+
+        $response->assertRedirect(route('home'));
+        $this->assertGuest();
     }
 
     private function createBooking(User $customer, Handyman $handyman, BookingStatus $status = BookingStatus::Pending): Booking

@@ -93,6 +93,10 @@ All source-of-truth Figma exports are in `resources/views/worker/`:
 - Added validated service-area updates for existing ZIP code, city, and availability fields.
 - Added secure account settings and password-change forms using current-password verification and hashed storage.
 - Added profile/service-area/settings form tests covering persistence and password changes.
+- Integrated Worker registration and login with the existing `web` guard, `User` model, `UserRole::Handyman`, and shared logout route.
+- Added Worker registration transaction that creates both the role-bearing user and required Handyman profile.
+- Added Worker-only login rejection for customer credentials and Worker-specific redirects.
+- Reviewed all Worker routes, controllers, Form Requests, services, policies, models, Blade pages, and Worker feature tests.
 
 ## Pending Tasks
 
@@ -125,6 +129,9 @@ All source-of-truth Figma exports are in `resources/views/worker/`:
 - Schedule and earnings pages preserve the original Figma exports as fallback markup, while authenticated Worker routes render the real-data branches.
 - Existing `avatar` URLs are displayed when present, but image upload is not implemented because no Worker upload/storage workflow is defined.
 - Travel radius, neighborhood preferences, portfolio photos, and notification preferences remain visibly unsupported because no corresponding database columns or persistence models exist.
+- No application log files currently exist under `storage/logs`, so there were no runtime log entries to review.
+- Static diagnostics and PHP syntax checks pass, but PHPUnit and Artisan route inspection could not boot because `vendor/autoload.php` is absent. Composer installation is blocked by PHP `8.3.6` versus locked dependency requirement PHP `>=8.4.1`.
+- Browser-level responsive rendering and application-log verification remain pending until dependencies and a runnable frontend/server environment are available.
 - Full PHPUnit, Artisan route, and Pint validation is blocked until the project runs on PHP 8.4.1+ or its locked dependency set is updated by the project owner.
 
 ## Short Implementation Plan

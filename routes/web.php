@@ -9,6 +9,7 @@ use App\Http\Controllers\Handyman\HandymanController;
 use App\Http\Controllers\Review\ReviewController;
 use App\Http\Controllers\User\CustomerProfileController;
 use App\Http\Controllers\Worker\WorkerController;
+use App\Http\Controllers\Worker\WorkerAuthController;
 use Illuminate\Support\Facades\Route;
 
 // ─── Public pages ────────────────────────────────────────────────────────────
@@ -19,7 +20,7 @@ Route::get('/', function () {
 
 Route::get('/find-handyman', [HandymanController::class, 'index'])->name('handymen.index');
 
-// ─── Worker workspace preview pages ─────────────────────────────────────────
+// ─── Worker workspace pages ─────────────────────────────────────────────────
 
 Route::prefix('worker')->name('worker.')->middleware(['auth', 'role:handyman'])->group(function () {
     Route::get('/', [WorkerController::class, 'dashboard'])->name('dashboard');
@@ -40,8 +41,10 @@ Route::prefix('worker')->name('worker.')->middleware(['auth', 'role:handyman'])-
 });
 
 Route::middleware('guest')->group(function () {
-    Route::get('/worker/sign-in', [WorkerController::class, 'signInUp'])->name('worker.sign-in');
-    Route::get('/worker/sign-up', [WorkerController::class, 'signInUp'])->name('worker.sign-up');
+    Route::get('/worker/sign-in', [WorkerAuthController::class, 'showLogin'])->name('worker.sign-in');
+    Route::post('/worker/sign-in', [WorkerAuthController::class, 'login'])->name('worker.login');
+    Route::get('/worker/sign-up', [WorkerAuthController::class, 'showRegistration'])->name('worker.sign-up');
+    Route::post('/worker/sign-up', [WorkerAuthController::class, 'register'])->name('worker.register');
 });
 
 // ─── Google OAuth (accessible to guests, redirect to home if logged in) ────────

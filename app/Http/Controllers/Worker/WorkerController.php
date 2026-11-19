@@ -145,8 +145,4 @@ class WorkerController extends Controller
 		return back()->with('success', 'Your password has been changed successfully.');
 	}
 
-	public function signInUp(): View
-	{
-		return view('worker.sign_in_up');
-	}
 }
