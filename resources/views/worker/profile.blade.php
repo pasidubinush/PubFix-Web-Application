@@ -80,18 +80,18 @@
           <div class="flex-1 inline-flex flex-col justify-start items-start gap-6 overflow-hidden">
             <div class="self-stretch p-7 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4 overflow-hidden">
               <div class="self-stretch inline-flex justify-start items-center gap-5 overflow-hidden">
-                <img class="size-20 rounded-[100px]" src="https://placehold.co/88x88" />
+                <img class="size-20 rounded-[100px]" src="{{ $handyman->user->avatar ?: 'https://placehold.co/88x88' }}" alt="{{ $handyman->user->name }}" />
                 <div class="flex-1 inline-flex flex-col justify-start items-start gap-2.5 overflow-hidden">
                   <div class="size- inline-flex justify-start items-center gap-3 overflow-hidden">
-                    <div class="justify-start text-zinc-800 text-3xl font-normal font-['Inter']">Marcus Reed</div>
+                    <div class="justify-start text-zinc-800 text-3xl font-normal font-['Inter']">{{ $handyman->user->name }}</div>
                     <div class="size- px-2.5 py-1.5 bg-gray-200 rounded-[100px] flex justify-start items-start overflow-hidden">
                       <div class="justify-start text-teal-800 text-xs font-medium font-['Inter']">Verified pro</div>
                     </div>
                   </div>
-                  <div class="self-stretch justify-start text-zinc-800 text-xs font-normal font-['Inter'] leading-5">Carpentry & assembly</div>
+                  <div class="self-stretch justify-start text-zinc-800 text-xs font-normal font-['Inter'] leading-5">{{ $handyman->category->name }}</div>
                   <div class="size- inline-flex justify-start items-center gap-2 overflow-hidden">
-                    <div class="justify-start text-teal-800 text-xs font-normal font-['Inter']">★ 4.9</div>
-                    <div class="justify-start text-neutral-500 text-xs font-normal font-['Inter']">(128 reviews) · Austin, TX</div>
+                    <div class="justify-start text-teal-800 text-xs font-normal font-['Inter']">★ {{ number_format((float) ($handyman->reviews_avg_rating ?? 0), 1) }}</div>
+                    <div class="justify-start text-neutral-500 text-xs font-normal font-['Inter']">({{ $handyman->reviews_count }} reviews) · {{ $handyman->city }}</div>
                   </div>
                 </div>
                 <div class="size-4 relative overflow-hidden">
@@ -101,37 +101,27 @@
               <div class="self-stretch h-px bg-neutral-200"></div>
               <div class="self-stretch inline-flex justify-start items-start gap-7 overflow-hidden">
                 <div class="flex-1 inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
-                  <div class="justify-start text-zinc-800 text-2xl font-normal font-['Inter']">$55 / hour</div>
+                  <div class="justify-start text-zinc-800 text-2xl font-normal font-['Inter']">${{ number_format((float) $handyman->hourly_rate, 2) }} / hour</div>
                   <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter'] leading-4">1-hour minimum</div>
                 </div>
                 <div class="flex-1 inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
                   <div class="self-stretch justify-start text-zinc-800 text-xs font-semibold font-['Inter'] leading-5">Your local helping hand</div>
-                  <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter'] leading-4">Within 10 miles of 78704</div>
+                  <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter'] leading-4">{{ $handyman->city }}</div>
                 </div>
                 <div class="size- px-2.5 py-1.5 bg-gray-200 rounded-[100px] flex justify-start items-start overflow-hidden">
-                  <div class="justify-start text-teal-800 text-xs font-medium font-['Inter']">Open to new jobs</div>
+                  <div class="justify-start text-teal-800 text-xs font-medium font-['Inter']">{{ $handyman->available ? 'Open to new jobs' : 'Currently unavailable' }}</div>
                 </div>
               </div>
             </div>
-            <div class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4 overflow-hidden">
-              <div class="self-stretch inline-flex justify-between items-start overflow-hidden">
-                <div class="flex-1 justify-start text-zinc-800 text-xl font-semibold font-['Inter']">A little about me</div>
-                <div class="justify-start text-teal-800 text-xs font-semibold font-['Inter']">Edit bio ↗</div>
-              </div>
-              <div class="self-stretch justify-start text-zinc-800 text-xs font-normal font-['Inter'] leading-5">Hi, I’m Marcus. I help Austin neighbors make their homes work a little better—from flat-pack furniture and floating shelves to thoughtful carpentry fixes. I bring the tools, take care of your space, and make sure the details are right before I leave.</div>
-              <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter'] leading-5">Clear communication, careful work, and a tidy finish. Let’s get that project off your list.</div>
-              <div class="self-stretch inline-flex justify-start items-start gap-2 overflow-hidden">
-                <div class="size- px-2.5 py-1.5 bg-stone-100 rounded-[100px] flex justify-start items-start overflow-hidden">
-                  <div class="justify-start text-neutral-500 text-xs font-medium font-['Inter']">Furniture assembly</div>
-                </div>
-                <div class="size- px-2.5 py-1.5 bg-stone-100 rounded-[100px] flex justify-start items-start overflow-hidden">
-                  <div class="justify-start text-neutral-500 text-xs font-medium font-['Inter']">Shelving installation</div>
-                </div>
-                <div class="size- px-2.5 py-1.5 bg-stone-100 rounded-[100px] flex justify-start items-start overflow-hidden">
-                  <div class="justify-start text-neutral-500 text-xs font-medium font-['Inter']">Carpentry repairs</div>
-                </div>
-              </div>
-            </div>
+            <form method="POST" action="{{ route('worker.profile.update') }}" class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col gap-4">
+              @csrf
+              @method('PUT')
+              <div class="self-stretch flex justify-between items-start gap-4"><label for="worker-bio" class="flex-1 text-zinc-800 text-xl font-semibold font-['Inter']">A little about me</label><span class="text-teal-800 text-xs font-semibold font-['Inter']">Edit bio</span></div>
+              <textarea id="worker-bio" name="bio" rows="4" class="w-full p-3 border border-neutral-200 rounded-lg text-zinc-800 text-xs leading-5">{{ old('bio', $handyman->bio) }}</textarea>
+              <div class="flex flex-col gap-2"><label for="worker-category" class="text-zinc-800 text-xs font-semibold">Primary service</label><select id="worker-category" name="category_id" class="min-h-11 px-3 border border-neutral-200 rounded-lg text-zinc-800 text-xs">@foreach ($categories as $category)<option value="{{ $category->id }}" @selected($category->id === $handyman->category_id)>{{ $category->name }}</option>@endforeach</select></div>
+              <div class="flex flex-col gap-2"><label for="worker-rate" class="text-zinc-800 text-xs font-semibold">Hourly rate</label><input id="worker-rate" name="hourly_rate" type="number" min="0" step="0.01" value="{{ old('hourly_rate', $handyman->hourly_rate) }}" class="min-h-11 px-3 border border-neutral-200 rounded-lg text-zinc-800 text-xs" /></div>
+              <button type="submit" class="self-start h-10 px-4 bg-teal-800 rounded-lg text-white text-xs font-semibold">Save profile</button>
+            </form>
             <div class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4 overflow-hidden">
               <div class="self-stretch inline-flex justify-between items-start overflow-hidden">
                 <div class="flex-1 justify-start text-zinc-800 text-xl font-semibold font-['Inter']">A few recent projects</div>

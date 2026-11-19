@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class WorkerWorkspaceService
 {
@@ -212,10 +213,68 @@ class WorkerWorkspaceService
      *
      * @param array<string, mixed> $attributes
      */
-    public function updateProfile(Handyman $handyman, array $attributes): Handyman
+    public function updateProfile(User $user, array $attributes): Handyman
     {
-        $handyman->update($attributes);
+        return DB::transaction(function () use ($user, $attributes): Handyman {
+            $handyman = $this->handyman($user);
+            $userAttributes = collect($attributes)->only(['name', 'phone'])->all();
 
-        return $handyman->refresh();
+            if ($userAttributes !== []) {
+                $user->update($userAttributes);
+            }
+            $handyman->update(collect($attributes)->only([
+                'category_id',
+                'hourly_rate',
+                'bio',
+            ])->all());
+
+            return $handyman->refresh();
+        });
+    }
+
+    /**
+     * Update the supported location and availability fields.
+     *
+     * @param array<string, mixed> $attributes
+     */
+    public function updateServiceArea(User $user, array $attributes): Handyman
+    {
+        return DB::transaction(function () use ($user, $attributes): Handyman {
+            $handyman = $this->handyman($user);
+            $user->update(['zip_code' => $attributes['zip_code']]);
+            $handyman->update([
+                'city' => $attributes['city'],
+                'available' => $attributes['available'] ?? false,
+            ]);
+
+            return $handyman->refresh();
+        });
+    }
+
+    /**
+     * Update supported account settings without touching customer-only data.
+     *
+     * @param array<string, mixed> $attributes
+     */
+    public function updateSettings(User $user, array $attributes): User
+    {
+        $user->update([
+            'name' => $attributes['name'],
+            'phone' => $attributes['phone'] ?? null,
+        ]);
+
+        return $user->refresh();
+    }
+
+    /**
+     * Change the authenticated Worker's password after Form Request verification.
+     *
+     * @param array{password: string} $attributes
+     */
+    public function updatePassword(User $user, array $attributes): User
+    {
+        $user->update(['password' => Hash::make($attributes['password'])]);
+
+        return $user->refresh();
     }
 }

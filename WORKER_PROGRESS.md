@@ -89,6 +89,10 @@ All source-of-truth Figma exports are in `resources/views/worker/`:
 - Added month-filtered Worker schedule data for confirmed and completed bookings, including upcoming appointment details.
 - Added earnings-period data for completed jobs only, with explicit payment-data availability instead of fabricated totals.
 - Added schedule and earnings feature tests for date filtering and payment-data behavior.
+- Added validated Worker profile updates for existing name, phone, category, hourly rate, and bio fields.
+- Added validated service-area updates for existing ZIP code, city, and availability fields.
+- Added secure account settings and password-change forms using current-password verification and hashed storage.
+- Added profile/service-area/settings form tests covering persistence and password changes.
 
 ## Pending Tasks
 
@@ -119,6 +123,8 @@ All source-of-truth Figma exports are in `resources/views/worker/`:
 - Job progress has no `in_progress` status or progress column, so the current workflow exposes confirmed details and supports completion only.
 - Monthly earnings display `N/A` because the current schema has no payment or payout data.
 - Schedule and earnings pages preserve the original Figma exports as fallback markup, while authenticated Worker routes render the real-data branches.
+- Existing `avatar` URLs are displayed when present, but image upload is not implemented because no Worker upload/storage workflow is defined.
+- Travel radius, neighborhood preferences, portfolio photos, and notification preferences remain visibly unsupported because no corresponding database columns or persistence models exist.
 - Full PHPUnit, Artisan route, and Pint validation is blocked until the project runs on PHP 8.4.1+ or its locked dependency set is updated by the project owner.
 
 ## Short Implementation Plan

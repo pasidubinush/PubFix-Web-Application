@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Worker\UpdateWorkerProfileRequest;
 use App\Http\Requests\Worker\WorkerBookingActionRequest;
 use App\Http\Requests\Worker\WorkerPeriodRequest;
+use App\Http\Requests\Worker\UpdateWorkerPasswordRequest;
+use App\Http\Requests\Worker\UpdateWorkerServiceAreaRequest;
+use App\Http\Requests\Worker\UpdateWorkerSettingsRequest;
+use App\Models\Category;
 use App\Models\Booking;
-use App\Models\Handyman;
 use App\Services\Worker\WorkerWorkspaceService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -84,8 +87,9 @@ class WorkerController extends Controller
 	public function profile(Request $request): View
 	{
 		$handyman = $this->workspaceService->profile($this->workspaceService->handyman($request->user()));
+		$categories = Category::query()->orderBy('name')->get();
 
-		return view('worker.profile', compact('handyman'));
+		return view('worker.profile', compact('handyman', 'categories'));
 	}
 
 	public function schedule(WorkerPeriodRequest $request): View
@@ -101,8 +105,9 @@ class WorkerController extends Controller
 	public function serviceArea(Request $request): View
 	{
 		$handyman = $this->workspaceService->profile($this->workspaceService->handyman($request->user()));
+		$user = $request->user();
 
-		return view('worker.serviceArea', compact('handyman'));
+		return view('worker.serviceArea', compact('handyman', 'user'));
 	}
 
 	public function settings(Request $request): View
@@ -114,11 +119,30 @@ class WorkerController extends Controller
 
 	public function updateProfile(UpdateWorkerProfileRequest $request): RedirectResponse
 	{
-		$handyman = $this->workspaceService->handyman($request->user());
-
-		$this->workspaceService->updateProfile($handyman, $request->validated());
+		$this->workspaceService->updateProfile($request->user(), $request->validated());
 
 		return back()->with('success', 'Your Worker profile has been updated.');
+	}
+
+	public function updateServiceArea(UpdateWorkerServiceAreaRequest $request): RedirectResponse
+	{
+		$this->workspaceService->updateServiceArea($request->user(), $request->validated());
+
+		return back()->with('success', 'Your service area has been updated.');
+	}
+
+	public function updateSettings(UpdateWorkerSettingsRequest $request): RedirectResponse
+	{
+		$this->workspaceService->updateSettings($request->user(), $request->validated());
+
+		return back()->with('success', 'Your account settings have been updated.');
+	}
+
+	public function updatePassword(UpdateWorkerPasswordRequest $request): RedirectResponse
+	{
+		$this->workspaceService->updatePassword($request->user(), $request->validated());
+
+		return back()->with('success', 'Your password has been changed successfully.');
 	}
 
 	public function signInUp(): View

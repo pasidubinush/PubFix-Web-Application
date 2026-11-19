@@ -71,11 +71,11 @@
         </div>
         <div class="self-stretch inline-flex justify-start items-start gap-6 overflow-hidden">
           <div class="flex-1 inline-flex flex-col justify-start items-start gap-6 overflow-hidden">
-            <div class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4 overflow-hidden">
+            <div class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4">
               <div class="self-stretch inline-flex justify-between items-center overflow-hidden">
                 <div class="flex-1 inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
                   <div class="self-stretch justify-start text-zinc-800 text-xl font-semibold font-['Inter']">Your neighborhood, and a little beyond</div>
-                  <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter'] leading-5">Within 10 miles of 78704 · Austin, TX</div>
+                  <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter']">{{ $user->zip_code }} · {{ $handyman->city }}</div>
                 </div>
                 <div class="size- px-2.5 py-1.5 bg-gray-200 rounded-[100px] flex justify-start items-start overflow-hidden">
                   <div class="justify-start text-teal-800 text-xs font-medium font-['Inter']">10-mile radius</div>
@@ -88,14 +88,14 @@
                   <div class="size-8 text-center justify-center text-zinc-800 text-xl font-normal font-['Inter']">−</div>
                 </div>
                 <div class="size- px-3 py-1.5 left-[340px] top-[258px] absolute bg-white rounded-md inline-flex justify-start items-start overflow-hidden">
-                  <div class="justify-start text-teal-800 text-xs font-semibold font-['Inter']">78704</div>
+                  <div class="justify-start text-teal-800 text-xs font-semibold font-['Inter']">{{ $user->zip_code }}</div>
                 </div>
                 <div class="size-10 left-[355px] top-[208px] absolute bg-teal-800 rounded-[100px] outline outline-[3px] outline-offset-[-3px] outline-white inline-flex justify-center items-center overflow-hidden">
                   <div class="size-5 relative overflow-hidden">
                     <div class="w-3.5 h-4 left-[3.33px] top-[1.67px] absolute outline outline-1 outline-offset-[-0.50px] outline-white"></div>
                   </div>
                 </div>
-                <div class="left-[390px] top-[82px] absolute justify-start text-neutral-500 text-2xl font-semibold font-['Inter']">Austin</div>
+                <div class="left-[390px] top-[82px] absolute justify-start text-neutral-500 text-2xl font-semibold font-['Inter']">{{ $handyman->city }}</div>
                 <div class="left-[120px] top-[370px] absolute justify-start text-neutral-500 text-[10px] font-normal font-['Inter']">SUNSET VALLEY</div>
                 <div class="left-[212px] top-[315px] absolute justify-start text-neutral-500 text-[10px] font-normal font-['Inter']">South Lamar</div>
                 <div class="left-[477px] top-[242px] absolute justify-start text-neutral-500 text-[10px] font-normal font-['Inter']">Travis Heights</div>
@@ -110,7 +110,9 @@
               </div>
               <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter'] leading-4">Neighbors inside this area can find your profile and send job requests. Your exact home address is never shown publicly.</div>
             </div>
-            <div class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4 overflow-hidden">
+            <form method="POST" action="{{ route('worker.service-area.update') }}" class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4">
+              @csrf
+              @method('PUT')
               <div class="self-stretch justify-start text-zinc-800 text-base font-semibold font-['Inter']">A few neighborhoods you cover</div>
               <div class="self-stretch inline-flex justify-start items-start gap-2 flex-wrap content-start overflow-hidden">
                 <div class="size- px-2.5 py-1.5 bg-stone-100 rounded-[100px] flex justify-start items-start overflow-hidden">
@@ -146,16 +148,13 @@
               <div class="self-stretch justify-start text-zinc-800 text-base font-semibold font-['Inter']">Set your service area</div>
               <div class="self-stretch flex flex-col justify-start items-start gap-2 overflow-hidden">
                 <div class="self-stretch justify-start text-zinc-800 text-xs font-semibold font-['Inter'] leading-5">Home ZIP code</div>
-                <div class="self-stretch min-h-11 px-3 py-3 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-neutral-200 inline-flex justify-start items-start overflow-hidden">
-                  <div class="flex-1 justify-start text-zinc-800 text-xs font-normal font-['Inter']">78704</div>
-                </div>
-                <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter'] leading-4">Austin, Texas</div>
+                <input id="worker-zip-code" name="zip_code" value="{{ old('zip_code', $user->zip_code) }}" required class="self-stretch min-h-11 px-3 py-3 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-neutral-200 text-zinc-800 text-xs" />
+                <label for="worker-city" class="self-stretch text-neutral-500 text-xs font-normal font-['Inter'] leading-4">City</label>
+                <input id="worker-city" name="city" value="{{ old('city', $handyman->city) }}" required class="self-stretch min-h-11 px-3 py-3 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-neutral-200 text-zinc-800 text-xs" />
               </div>
               <div class="self-stretch flex flex-col justify-start items-start gap-2 overflow-hidden">
                 <div class="self-stretch justify-start text-zinc-800 text-xs font-semibold font-['Inter'] leading-5">Travel radius</div>
-                <div class="self-stretch min-h-11 px-3 py-3 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-neutral-200 inline-flex justify-start items-start overflow-hidden">
-                  <div class="flex-1 justify-start text-zinc-800 text-xs font-normal font-['Inter']">10 miles</div>
-                </div>
+                <div class="self-stretch min-h-11 px-3 py-3 bg-stone-100 rounded-lg outline outline-1 outline-offset-[-1px] outline-neutral-200 text-neutral-500 text-xs">Travel radius is not stored in the current schema.</div>
               </div>
               <div class="self-stretch h-4 relative inline-flex justify-start items-center overflow-hidden">
                 <div class="flex-1 h-1 bg-neutral-200 rounded-sm"></div>
@@ -166,8 +165,11 @@
                 <div class="justify-start text-neutral-500 text-[10px] font-normal font-['Inter']">5 miles</div>
                 <div class="justify-start text-neutral-500 text-[10px] font-normal font-['Inter']">25 miles</div>
               </div>
-              <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter'] leading-4">A smaller radius can mean less time driving and more time doing good work.</div>
-            </div>
+              <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter'] leading-4">Your service location uses the existing ZIP code and city fields.</div>
+              <input type="hidden" name="available" value="0" />
+              <label class="inline-flex items-center gap-2 text-zinc-800 text-xs"><input type="checkbox" name="available" value="1" @checked($handyman->available) class="accent-teal-800" /> Open to new jobs</label>
+              <button type="submit" class="self-start h-10 px-4 bg-teal-800 rounded-lg text-white text-xs font-semibold">Save changes</button>
+            </form>
             <div class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4 overflow-hidden">
               <div class="self-stretch justify-start text-zinc-800 text-base font-semibold font-['Inter']">Service preferences</div>
               <div class="self-stretch inline-flex justify-start items-center gap-6 overflow-hidden">

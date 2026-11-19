@@ -8,6 +8,7 @@ use App\Models\Booking;
 use App\Models\Handyman;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class WorkerWorkspaceTest extends TestCase
@@ -161,6 +162,43 @@ class WorkerWorkspaceTest extends TestCase
                     && $earnings['completedBookings']->contains($completedBooking)
                     && $earnings['completedBookings']->every(fn (Booking $booking): bool => $booking->isCompleted());
             });
+    }
+
+    public function test_worker_can_update_service_area_and_availability(): void
+    {
+        $handyman = Handyman::factory()->create();
+
+        $response = $this->actingAs($handyman->user)->put(route('worker.service-area.update'), [
+            'zip_code' => '78704',
+            'city' => 'Austin, TX',
+            'available' => true,
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('users', ['id' => $handyman->user_id, 'zip_code' => '78704']);
+        $this->assertDatabaseHas('handymen', ['id' => $handyman->id, 'city' => 'Austin, TX', 'available' => true]);
+    }
+
+    public function test_worker_can_update_account_settings_and_password(): void
+    {
+        $handyman = Handyman::factory()->create();
+
+        $settingsResponse = $this->actingAs($handyman->user)->put(route('worker.settings.update'), [
+            'name' => 'Updated Worker',
+            'phone' => '5125550123',
+        ]);
+
+        $settingsResponse->assertRedirect();
+        $this->assertDatabaseHas('users', ['id' => $handyman->user_id, 'name' => 'Updated Worker', 'phone' => '5125550123']);
+
+        $passwordResponse = $this->actingAs($handyman->user)->put(route('worker.settings.password'), [
+            'current_password' => 'password',
+            'password' => 'new-worker-password',
+            'password_confirmation' => 'new-worker-password',
+        ]);
+
+        $passwordResponse->assertRedirect();
+        $this->assertTrue(Hash::check('new-worker-password', $handyman->user->fresh()->password));
     }
 
     private function createBooking(User $customer, Handyman $handyman, BookingStatus $status = BookingStatus::Pending): Booking

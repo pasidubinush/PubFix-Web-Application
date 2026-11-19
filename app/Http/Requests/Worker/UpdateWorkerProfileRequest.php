@@ -20,6 +20,8 @@ class UpdateWorkerProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'phone' => ['sometimes', 'nullable', 'string', 'max:30'],
             'category_id' => ['sometimes', 'integer', 'exists:categories,id'],
             'hourly_rate' => ['sometimes', 'numeric', 'min:0'],
             'bio' => ['sometimes', 'nullable', 'string', 'max:5000'],

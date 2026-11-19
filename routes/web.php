@@ -34,6 +34,9 @@ Route::prefix('worker')->name('worker.')->middleware(['auth', 'role:handyman'])-
     Route::get('/service-area', [WorkerController::class, 'serviceArea'])->name('service-area');
     Route::get('/settings', [WorkerController::class, 'settings'])->name('settings');
     Route::put('/profile', [WorkerController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/service-area', [WorkerController::class, 'updateServiceArea'])->name('service-area.update');
+    Route::put('/settings', [WorkerController::class, 'updateSettings'])->name('settings.update');
+    Route::put('/settings/password', [WorkerController::class, 'updatePassword'])->name('settings.password');
 });
 
 Route::middleware('guest')->group(function () {

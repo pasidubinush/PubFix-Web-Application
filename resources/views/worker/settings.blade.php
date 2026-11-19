@@ -71,7 +71,9 @@
         </div>
         <div class="self-stretch inline-flex justify-start items-start gap-6 overflow-hidden">
           <div class="flex-1 inline-flex flex-col justify-start items-start gap-6 overflow-hidden">
-            <div class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4 overflow-hidden">
+            <form method="POST" action="{{ route('worker.settings.update') }}" class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4">
+              @csrf
+              @method('PUT')
               <div class="self-stretch justify-start text-zinc-800 text-xl font-semibold font-['Inter']">Account details</div>
               <div class="self-stretch inline-flex justify-start items-center gap-4 overflow-hidden">
                 <img class="size-14 rounded-[100px]" src="https://placehold.co/58x58" />
@@ -83,33 +85,40 @@
               <div class="self-stretch inline-flex justify-start items-start gap-4 overflow-hidden">
                 <div class="flex-1 inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
                   <div class="self-stretch justify-start text-zinc-800 text-xs font-semibold font-['Inter'] leading-5">First name</div>
-                  <div class="self-stretch min-h-11 px-3 py-3 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-neutral-200 inline-flex justify-start items-start overflow-hidden">
-                    <div class="flex-1 justify-start text-zinc-800 text-xs font-normal font-['Inter']">Marcus</div>
-                  </div>
+                  <input id="worker-settings-name" name="name" value="{{ old('name', $user->name) }}" required class="self-stretch min-h-11 px-3 py-3 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-neutral-200 text-zinc-800 text-xs" />
                 </div>
                 <div class="flex-1 inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
                   <div class="self-stretch justify-start text-zinc-800 text-xs font-semibold font-['Inter'] leading-5">Last name</div>
-                  <div class="self-stretch min-h-11 px-3 py-3 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-neutral-200 inline-flex justify-start items-start overflow-hidden">
-                    <div class="flex-1 justify-start text-zinc-800 text-xs font-normal font-['Inter']">Reed</div>
-                  </div>
+                  <input value="Stored with display name" disabled class="self-stretch min-h-11 px-3 py-3 bg-stone-100 rounded-lg outline outline-1 outline-offset-[-1px] outline-neutral-200 text-neutral-500 text-xs" />
                 </div>
               </div>
               <div class="self-stretch inline-flex justify-start items-start gap-4 overflow-hidden">
                 <div class="flex-1 inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
                   <div class="self-stretch justify-start text-zinc-800 text-xs font-semibold font-['Inter'] leading-5">Email address</div>
                   <div class="self-stretch min-h-11 px-3 py-3 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-neutral-200 inline-flex justify-start items-start overflow-hidden">
-                    <div class="flex-1 justify-start text-zinc-800 text-xs font-normal font-['Inter']">marcus.reed@example.com</div>
+                    <div class="flex-1 justify-start text-zinc-800 text-xs font-normal font-['Inter']">{{ $user->email }}</div>
                   </div>
                 </div>
                 <div class="flex-1 inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
                   <div class="self-stretch justify-start text-zinc-800 text-xs font-semibold font-['Inter'] leading-5">Mobile number</div>
-                  <div class="self-stretch min-h-11 px-3 py-3 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-neutral-200 inline-flex justify-start items-start overflow-hidden">
-                    <div class="flex-1 justify-start text-zinc-800 text-xs font-normal font-['Inter']">(512) 555-0148</div>
-                  </div>
+                  <input id="worker-settings-phone" name="phone" type="tel" value="{{ old('phone', $user->phone) }}" class="self-stretch min-h-11 px-3 py-3 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-neutral-200 text-zinc-800 text-xs" />
                 </div>
               </div>
               <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter'] leading-4">Your contact details are private. Customers reach you through Goodhands.</div>
-            </div>
+              <button type="submit" class="self-start h-10 px-4 bg-teal-800 rounded-lg text-white text-xs font-semibold">Save account details</button>
+            </form>
+            <form method="POST" action="{{ route('worker.settings.password') }}" class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col gap-4">
+              @csrf
+              @method('PUT')
+              <h2 class="text-zinc-800 text-xl font-semibold font-['Inter']">Change password</h2>
+              <label for="worker-current-password" class="text-zinc-800 text-xs font-semibold">Current password</label>
+              <input id="worker-current-password" name="current_password" type="password" required class="min-h-11 px-3 border border-neutral-200 rounded-lg text-zinc-800 text-xs" />
+              <label for="worker-password" class="text-zinc-800 text-xs font-semibold">New password</label>
+              <input id="worker-password" name="password" type="password" required class="min-h-11 px-3 border border-neutral-200 rounded-lg text-zinc-800 text-xs" />
+              <label for="worker-password-confirmation" class="text-zinc-800 text-xs font-semibold">Confirm new password</label>
+              <input id="worker-password-confirmation" name="password_confirmation" type="password" required class="min-h-11 px-3 border border-neutral-200 rounded-lg text-zinc-800 text-xs" />
+              <button type="submit" class="self-start h-10 px-4 bg-teal-800 rounded-lg text-white text-xs font-semibold">Change password</button>
+            </form>
             <div class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4 overflow-hidden">
               <div class="self-stretch inline-flex justify-between items-start overflow-hidden">
                 <div class="flex-1 justify-start text-zinc-800 text-xl font-semibold font-['Inter']">Notifications</div>
@@ -117,10 +126,10 @@
                   <div class="justify-start text-neutral-500 text-xs font-medium font-['Inter']">Your preferences</div>
                 </div>
               </div>
-              <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter'] leading-5">Choose what you hear from us. Important account and payment updates always stay on.</div>
+              <div class="self-stretch justify-start text-neutral-500 text-xs font-normal font-['Inter'] leading-5">Notification preferences are not stored in the current database schema.</div>
               <div class="self-stretch inline-flex justify-start items-center gap-6 overflow-hidden">
                 <div class="flex-1 justify-start"><span class="text-zinc-800 text-xs font-semibold font-['Inter'] leading-6">New job requests<br/></span><span class="text-neutral-500 text-xs font-normal font-['Inter'] leading-5">Email and push alerts when a neighbor needs a hand.</span></div>
-                <div class="w-8 h-5 relative bg-teal-800 rounded-2xl flex justify-start items-start overflow-hidden">
+                <div class="w-8 h-5 relative bg-neutral-200 rounded-2xl flex justify-start items-start overflow-hidden" aria-disabled="true">
                   <div class="size-3 left-[15px] top-[3px] absolute bg-white rounded-[10px]"></div>
                 </div>
               </div>
@@ -128,7 +137,7 @@
               <div class="self-stretch h-px bg-neutral-200"></div>
               <div class="self-stretch inline-flex justify-start items-center gap-6 overflow-hidden">
                 <div class="flex-1 justify-start"><span class="text-zinc-800 text-xs font-semibold font-['Inter'] leading-6">Tips, stories & Goodhands news<br/></span><span class="text-neutral-500 text-xs font-normal font-['Inter'] leading-5">Occasional emails to help you grow your business.</span></div>
-                <div class="w-8 h-5 relative bg-neutral-200 rounded-2xl flex justify-start items-start overflow-hidden">
+                <div class="w-8 h-5 relative bg-neutral-200 rounded-2xl flex justify-start items-start overflow-hidden" aria-disabled="true">
                   <div class="size-3 left-[3px] top-[3px] absolute bg-white rounded-[10px]"></div>
                 </div>
               </div>
