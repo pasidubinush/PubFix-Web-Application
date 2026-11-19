@@ -1,0 +1,579 @@
+.pubfix-customer {
+  display: flex;
+  flex-direction: column;
+  min-height: 1100px;
+  align-items: flex-start;
+  position: relative;
+  background-color: #f8f7f2;
+}
+
+.pubfix-customer .main-navigation {
+  display: flex;
+  height: 88px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 80px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  background-color: #f8f7f2;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-color: #dfe3d9;
+}
+
+.pubfix-customer .goodhands {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.pubfix-customer .brand-mark {
+  display: flex;
+  width: 34px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: #25664d;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.pubfix-customer .hand-heart {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.pubfix-customer .vector {
+  position: absolute;
+  width: 93.75%;
+  height: 89.58%;
+  top: 10.42%;
+  left: 6.25%;
+}
+
+.pubfix-customer .brand-name {
+  position: relative;
+  width: fit-content;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: transparent;
+  font-size: 25px;
+  letter-spacing: -0.28px;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.pubfix-customer .text-wrapper {
+  color: #1e3329;
+  letter-spacing: -0.07px;
+}
+
+.pubfix-customer .span {
+  color: #26c23d;
+  letter-spacing: -0.07px;
+}
+
+.pubfix-customer .account-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.pubfix-customer .div {
+  position: relative;
+  width: fit-content;
+  font-family: "Inter-SemiBold", Helvetica;
+  font-weight: 600;
+  color: #1e3329;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.pubfix-customer .customer-signup {
+  position: relative;
+  width: fit-content;
+  font-family: "Inter-SemiBold", Helvetica;
+  font-weight: 600;
+  color: #25664d;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.pubfix-customer .action {
+  display: inline-flex;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0px 22px;
+  position: relative;
+  flex: 0 0 auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #dfe3d9;
+}
+
+.pubfix-customer .vector-wrapper {
+  position: relative;
+  width: 17px;
+  height: 17px;
+}
+
+.pubfix-customer .img {
+  position: absolute;
+  width: 73.77%;
+  height: 73.77%;
+  top: 26.23%;
+  left: 26.23%;
+}
+
+.pubfix-customer .create-a-customer {
+  display: flex;
+  align-items: flex-start;
+  gap: 100px;
+  padding: 48px 80px 64px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.pubfix-customer .customer-signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 0px 30px;
+  position: relative;
+  flex: 1;
+  flex-grow: 1;
+}
+
+.pubfix-customer .choose-your-role {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 5px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+  background-color: #ede9de;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.pubfix-customer .customer-role {
+  display: flex;
+  height: 49px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  flex: 1;
+  flex-grow: 1;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pubfix-customer .img-wrapper {
+  position: relative;
+  width: 18px;
+  height: 18px;
+}
+
+.pubfix-customer .vector-2 {
+  position: absolute;
+  width: 90.28%;
+  height: 94.45%;
+  top: 5.55%;
+  left: 9.72%;
+}
+
+.pubfix-customer .role {
+  position: relative;
+  width: fit-content;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: #25664d;
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.pubfix-customer .professional-role {
+  display: flex;
+  height: 49px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  flex: 1;
+  flex-grow: 1;
+}
+
+.pubfix-customer .vector-3 {
+  position: absolute;
+  width: 94.45%;
+  height: 94.46%;
+  top: 5.54%;
+  left: 5.55%;
+}
+
+.pubfix-customer .role-2 {
+  position: relative;
+  width: fit-content;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: #69736b;
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.pubfix-customer .form-introduction {
+  gap: 9px;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+}
+
+.pubfix-customer .title {
+  position: relative;
+  width: fit-content;
+  margin-top: -1px;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: #1e3329;
+  font-size: 32px;
+  letter-spacing: -0.35px;
+  line-height: normal;
+}
+
+.pubfix-customer .account-link {
+  position: relative;
+  width: fit-content;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: transparent;
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.pubfix-customer .text-wrapper-2 {
+  color: #69736b;
+}
+
+.pubfix-customer .text-wrapper-3 {
+  font-family: "Inter-SemiBold", Helvetica;
+  font-weight: 600;
+  color: #25664d;
+}
+
+.pubfix-customer .label-wrapper {
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #dfe3d9;
+  display: flex;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0px 22px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pubfix-customer .email-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.pubfix-customer .divider {
+  position: relative;
+  flex: 1;
+  flex-grow: 1;
+  height: 1px;
+  background-color: #dfe3d9;
+}
+
+.pubfix-customer .p {
+  margin-top: -1px;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: #69736b;
+  font-size: 11px;
+  white-space: nowrap;
+  position: relative;
+  width: fit-content;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.pubfix-customer .account-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 19px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.pubfix-customer .div-2 {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.pubfix-customer .form-field {
+  gap: 8px;
+  flex: 1;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+}
+
+.pubfix-customer .label {
+  position: relative;
+  width: fit-content;
+  margin-top: -1px;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: #1e3329;
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.pubfix-customer .input {
+  display: flex;
+  height: 49px;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0px 14px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #dfe3d9;
+}
+
+.pubfix-customer .value {
+  position: relative;
+  width: fit-content;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: #69736b;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.pubfix-customer .form-field-2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.pubfix-customer .value-wrapper {
+  height: 49px;
+  padding: 0px 14px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #dfe3d9;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: #69736b;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.pubfix-customer .text-wrapper-4 {
+  position: relative;
+  align-self: stretch;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: #69736b;
+  font-size: 11px;
+  letter-spacing: 0;
+  line-height: 16.5px;
+}
+
+.pubfix-customer .agreement {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.pubfix-customer .checkbox {
+  display: flex;
+  width: 17px;
+  height: 17px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: #25664d;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid;
+}
+
+.pubfix-customer .vector-wrapper-2 {
+  position: relative;
+  width: 12px;
+  height: 12px;
+}
+
+.pubfix-customer .vector-4 {
+  position: absolute;
+  width: 87.50%;
+  height: 79.17%;
+  top: 20.83%;
+  left: 12.50%;
+}
+
+.pubfix-customer .agreement-text {
+  position: relative;
+  flex: 1;
+  margin-top: -1px;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: #69736b;
+  font-size: 12px;
+  letter-spacing: 0;
+  line-height: 19.2px;
+}
+
+.pubfix-customer .action-2 {
+  background-color: #25664d;
+  display: flex;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0px 22px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pubfix-customer .label-2 {
+  font-family: "Inter-SemiBold", Helvetica;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 14px;
+  position: relative;
+  width: fit-content;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.pubfix-customer .vector-5 {
+  position: absolute;
+  width: 82.11%;
+  height: 82.11%;
+  top: 17.89%;
+  left: 17.89%;
+}
+
+.pubfix-customer .privacy-reassurance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.pubfix-customer .vector-6 {
+  position: absolute;
+  width: 91.67%;
+  height: 95.84%;
+  top: 4.16%;
+  left: 8.33%;
+}
+
+.pubfix-customer .footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 25px 80px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+  background-color: transparent;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-right-style: none;
+  border-bottom-style: none;
+  border-left-style: none;
+  border-color: #dfe3d9;
+}
+
+.pubfix-customer .text-wrapper-5 {
+  position: relative;
+  width: fit-content;
+  margin-top: -1px;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: #69736b;
+  font-size: 12px;
+  letter-spacing: 0;
+  line-height: normal;
+}
