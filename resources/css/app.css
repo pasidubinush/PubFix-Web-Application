@@ -9,3 +9,55 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+/* Preserve the exported desktop canvas while allowing Worker pages to shrink. */
+@media (max-width: 900px) {
+    .worker-page {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .worker-page > [class~="h-20"] {
+        padding-inline: 1rem;
+    }
+
+    .worker-page [class~="w-56"] {
+        width: 11rem;
+    }
+
+    .worker-page [class~="p-8"] {
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .worker-page {
+        overflow-x: hidden;
+    }
+
+    .worker-page > [class~="h-20"] {
+        height: auto;
+        min-height: 5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding-block: 1rem;
+    }
+
+    .worker-page > [class~="h-20"] > *:last-child {
+        max-width: 100%;
+    }
+
+    .worker-page > [class~="min-h-[1012px]"] {
+        flex-direction: column;
+    }
+
+    .worker-page [class~="w-56"] {
+        width: 100%;
+        border-right: 0;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .worker-page [class~="w-80"] {
+        width: 100%;
+    }
+}
+
