@@ -8,6 +8,8 @@ use App\Http\Controllers\Booking\BookingController;
 use App\Http\Controllers\Handyman\HandymanController;
 use App\Http\Controllers\Review\ReviewController;
 use App\Http\Controllers\User\CustomerProfileController;
+use App\Http\Controllers\Worker\WorkerController;
+use App\Http\Controllers\Worker\WorkerAuthController;
 use Illuminate\Support\Facades\Route;
 
 // ─── Public pages ────────────────────────────────────────────────────────────
@@ -17,6 +19,33 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/find-handyman', [HandymanController::class, 'index'])->name('handymen.index');
+
+// ─── Worker workspace pages ─────────────────────────────────────────────────
+
+Route::prefix('worker')->name('worker.')->middleware(['auth', 'role:handyman'])->group(function () {
+    Route::get('/', [WorkerController::class, 'dashboard'])->name('dashboard');
+    Route::get('/bookings', [WorkerController::class, 'bookings'])->name('bookings');
+    Route::get('/bookings/{booking}', [WorkerController::class, 'showBooking'])->defaults('action', 'viewAsWorker')->name('bookings.show');
+    Route::post('/bookings/{booking}/accept', [WorkerController::class, 'acceptBooking'])->defaults('action', 'accept')->name('bookings.accept');
+    Route::post('/bookings/{booking}/decline', [WorkerController::class, 'declineBooking'])->defaults('action', 'decline')->name('bookings.decline');
+    Route::post('/bookings/{booking}/complete', [WorkerController::class, 'completeBooking'])->defaults('action', 'complete')->name('bookings.complete');
+    Route::get('/earnings', [WorkerController::class, 'earnings'])->name('earnings');
+    Route::get('/profile', [WorkerController::class, 'profile'])->name('profile');
+    Route::get('/schedule', [WorkerController::class, 'schedule'])->name('schedule');
+    Route::get('/service-area', [WorkerController::class, 'serviceArea'])->name('service-area');
+    Route::get('/settings', [WorkerController::class, 'settings'])->name('settings');
+    Route::put('/profile', [WorkerController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/service-area', [WorkerController::class, 'updateServiceArea'])->name('service-area.update');
+    Route::put('/settings', [WorkerController::class, 'updateSettings'])->name('settings.update');
+    Route::put('/settings/password', [WorkerController::class, 'updatePassword'])->name('settings.password');
+});
+
+Route::middleware('guest')->group(function () {
+    Route::get('/worker/sign-in', [WorkerAuthController::class, 'showLogin'])->name('worker.sign-in');
+    Route::post('/worker/sign-in', [WorkerAuthController::class, 'login'])->name('worker.login');
+    Route::get('/worker/sign-up', [WorkerAuthController::class, 'showRegistration'])->name('worker.sign-up');
+    Route::post('/worker/sign-up', [WorkerAuthController::class, 'register'])->name('worker.register');
+});
 
 // ─── Google OAuth (accessible to guests, redirect to home if logged in) ────────
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');
