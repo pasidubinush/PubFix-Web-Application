@@ -9,8 +9,10 @@ use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class WorkerWorkspaceService
 {
@@ -71,7 +73,7 @@ class WorkerWorkspaceService
     /**
      * Load bookings assigned to a Worker.
      *
-     * @return Collection<int, \App\Models\Booking>
+     * @return Collection<int, Booking>
      */
     public function bookings(Handyman $handyman): Collection
     {
@@ -211,7 +213,7 @@ class WorkerWorkspaceService
     /**
      * Update only fields owned by the Handyman profile.
      *
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      */
     public function updateProfile(User $user, array $attributes): Handyman
     {
@@ -219,14 +221,37 @@ class WorkerWorkspaceService
             $handyman = $this->handyman($user);
             $userAttributes = collect($attributes)->only(['name', 'phone'])->all();
 
+            if (isset($attributes['avatar']) && $attributes['avatar'] instanceof UploadedFile) {
+                if ($user->avatar && ! str_starts_with($user->avatar, 'http') && Storage::disk('public')->exists($user->avatar)) {
+                    Storage::disk('public')->delete($user->avatar);
+                }
+
+                $avatarPath = $attributes['avatar']->store('avatars', 'public');
+                $userAttributes['avatar'] = $avatarPath;
+
+                $publicTarget = public_path('storage/'.$avatarPath);
+                $publicTargetDir = dirname($publicTarget);
+                if (! is_dir($publicTargetDir)) {
+                    @mkdir($publicTargetDir, 0755, true);
+                }
+                @copy(storage_path('app/public/'.$avatarPath), $publicTarget);
+            }
+
             if ($userAttributes !== []) {
                 $user->update($userAttributes);
             }
-            $handyman->update(collect($attributes)->only([
+
+            $handymanAttributes = collect($attributes)->only([
                 'category_id',
                 'hourly_rate',
                 'bio',
-            ])->all());
+                'city',
+                'available',
+            ])->all();
+
+            if ($handymanAttributes !== []) {
+                $handyman->update($handymanAttributes);
+            }
 
             return $handyman->refresh();
         });
@@ -235,7 +260,7 @@ class WorkerWorkspaceService
     /**
      * Update the supported location and availability fields.
      *
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      */
     public function updateServiceArea(User $user, array $attributes): Handyman
     {
@@ -254,7 +279,7 @@ class WorkerWorkspaceService
     /**
      * Update supported account settings without touching customer-only data.
      *
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      */
     public function updateSettings(User $user, array $attributes): User
     {
@@ -269,7 +294,7 @@ class WorkerWorkspaceService
     /**
      * Change the authenticated Worker's password after Form Request verification.
      *
-     * @param array{password: string} $attributes
+     * @param  array{password: string}  $attributes
      */
     public function updatePassword(User $user, array $attributes): User
     {

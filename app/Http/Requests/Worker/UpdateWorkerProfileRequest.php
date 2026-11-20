@@ -27,6 +27,7 @@ class UpdateWorkerProfileRequest extends FormRequest
             'bio' => ['sometimes', 'nullable', 'string', 'max:5000'],
             'city' => ['sometimes', 'string', 'max:255'],
             'available' => ['sometimes', 'boolean'],
+            'avatar' => ['sometimes', 'nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
         ];
     }
 }

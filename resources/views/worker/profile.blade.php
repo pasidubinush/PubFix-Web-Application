@@ -22,10 +22,10 @@
         </div>
         <div class="size-1.5 left-[16px] top-[3px] absolute bg-amber-800 rounded-md"></div>
       </div>
-      <img class="size-10 rounded-[100px]" src="https://placehold.co/39x39" />
+      <img class="size-10 rounded-[100px] object-cover" src="{{ $handyman->user->avatar_url ?: 'https://placehold.co/39x39' }}" alt="{{ $handyman->user->name }}" />
       <div class="size- inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
-        <div class="justify-start text-zinc-800 text-xs font-semibold font-['Inter']">Marcus Reed</div>
-        <div class="justify-start text-neutral-500 text-[10px] font-normal font-['Inter']">Carpentry & assembly</div>
+        <div class="justify-start text-zinc-800 text-xs font-semibold font-['Inter']">{{ $handyman->user->name }}</div>
+        <div class="justify-start text-neutral-500 text-[10px] font-normal font-['Inter']">{{ $handyman->category->name }}</div>
       </div>
       <div class="size-4 relative overflow-hidden">
         <div class="w-2 h-1 left-[4px] top-[6px] absolute outline outline-1 outline-offset-[-0.50px] outline-neutral-500"></div>
@@ -80,7 +80,7 @@
           <div class="flex-1 inline-flex flex-col justify-start items-start gap-6 overflow-hidden">
             <div class="self-stretch p-7 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4 overflow-hidden">
               <div class="self-stretch inline-flex justify-start items-center gap-5 overflow-hidden">
-                <img class="size-20 rounded-[100px]" src="{{ $handyman->user->avatar ?: 'https://placehold.co/88x88' }}" alt="{{ $handyman->user->name }}" />
+                <img id="profile-card-avatar" class="size-20 rounded-[100px] object-cover border border-neutral-200" src="{{ $handyman->user->avatar_url ?: 'https://placehold.co/88x88' }}" alt="{{ $handyman->user->name }}" />
                 <div class="flex-1 inline-flex flex-col justify-start items-start gap-2.5 overflow-hidden">
                   <div class="size- inline-flex justify-start items-center gap-3 overflow-hidden">
                     <div class="justify-start text-zinc-800 text-3xl font-normal font-['Inter']">{{ $handyman->user->name }}</div>
@@ -113,14 +113,81 @@
                 </div>
               </div>
             </div>
-            <form method="POST" action="{{ route('worker.profile.update') }}" class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col gap-4">
+            @if (session('success'))
+              <div class="self-stretch px-4 py-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-medium">
+                {{ session('success') }}
+              </div>
+            @endif
+            @if ($errors->any())
+              <div class="self-stretch px-4 py-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-xs font-medium">
+                <ul class="list-disc list-inside space-y-1">
+                  @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                  @endforeach
+                </ul>
+              </div>
+            @endif
+            <form method="POST" action="{{ route('worker.profile.update') }}" enctype="multipart/form-data" class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col gap-5">
               @csrf
               @method('PUT')
-              <div class="self-stretch flex justify-between items-start gap-4"><label for="worker-bio" class="flex-1 text-zinc-800 text-xl font-semibold font-['Inter']">A little about me</label><span class="text-teal-800 text-xs font-semibold font-['Inter']">Edit bio</span></div>
-              <textarea id="worker-bio" name="bio" rows="4" class="w-full p-3 border border-neutral-200 rounded-lg text-zinc-800 text-xs leading-5">{{ old('bio', $handyman->bio) }}</textarea>
-              <div class="flex flex-col gap-2"><label for="worker-category" class="text-zinc-800 text-xs font-semibold">Primary service</label><select id="worker-category" name="category_id" class="min-h-11 px-3 border border-neutral-200 rounded-lg text-zinc-800 text-xs">@foreach ($categories as $category)<option value="{{ $category->id }}" @selected($category->id === $handyman->category_id)>{{ $category->name }}</option>@endforeach</select></div>
-              <div class="flex flex-col gap-2"><label for="worker-rate" class="text-zinc-800 text-xs font-semibold">Hourly rate</label><input id="worker-rate" name="hourly_rate" type="number" min="0" step="0.01" value="{{ old('hourly_rate', $handyman->hourly_rate) }}" class="min-h-11 px-3 border border-neutral-200 rounded-lg text-zinc-800 text-xs" /></div>
-              <button type="submit" class="self-start h-10 px-4 bg-teal-800 rounded-lg text-white text-xs font-semibold">Save profile</button>
+              <div class="self-stretch flex justify-between items-start gap-4">
+                <span class="flex-1 text-zinc-800 text-xl font-semibold font-['Inter']">Profile details & photo</span>
+                <span class="text-teal-800 text-xs font-semibold font-['Inter']">Edit profile</span>
+              </div>
+
+              <!-- Profile Picture Upload Section -->
+              <div class="flex flex-col gap-2 p-4 bg-stone-50 border border-neutral-200 rounded-lg">
+                <label class="text-zinc-800 text-xs font-semibold">Profile photo</label>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <img id="worker-avatar-preview" class="size-16 rounded-full object-cover border-2 border-teal-800/30 shrink-0" src="{{ $handyman->user->avatar_url ?: 'https://placehold.co/88x88' }}" alt="{{ $handyman->user->name }}" />
+                  <div class="flex flex-col gap-1.5">
+                    <div class="flex items-center gap-2">
+                      <label for="worker-avatar-input" class="inline-flex items-center justify-center px-3.5 py-1.5 bg-white hover:bg-neutral-50 text-zinc-800 text-xs font-medium rounded-lg border border-neutral-300 shadow-2xs cursor-pointer transition-colors">
+                        Choose picture
+                      </label>
+                      <input id="worker-avatar-input" name="avatar" type="file" accept="image/jpeg,image/png,image/jpg,image/webp" class="hidden" onchange="previewWorkerAvatar(event)" />
+                      <span id="avatar-file-name" class="text-neutral-500 text-xs truncate max-w-[200px]">No file chosen</span>
+                    </div>
+                    <span class="text-neutral-500 text-[11px]">Recommended: Square image (JPG, PNG, WEBP), max 5MB. Shows on the find handyman page.</span>
+                    @error('avatar')
+                      <span class="text-red-600 text-xs">{{ $message }}</span>
+                    @enderror
+                  </div>
+                </div>
+              </div>
+
+              <div class="self-stretch flex flex-col gap-2">
+                <label for="worker-bio" class="text-zinc-800 text-xs font-semibold font-['Inter']">A little about me</label>
+                <textarea id="worker-bio" name="bio" rows="4" class="w-full p-3 border border-neutral-200 rounded-lg text-zinc-800 text-xs leading-5 focus:outline-none focus:border-teal-800">{{ old('bio', $handyman->bio) }}</textarea>
+                @error('bio')
+                  <span class="text-red-600 text-xs">{{ $message }}</span>
+                @enderror
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                  <label for="worker-category" class="text-zinc-800 text-xs font-semibold">Primary service</label>
+                  <select id="worker-category" name="category_id" class="min-h-11 px-3 border border-neutral-200 rounded-lg text-zinc-800 text-xs focus:outline-none focus:border-teal-800">
+                    @foreach ($categories as $category)
+                      <option value="{{ $category->id }}" @selected($category->id === $handyman->category_id)>{{ $category->name }}</option>
+                    @endforeach
+                  </select>
+                  @error('category_id')
+                    <span class="text-red-600 text-xs">{{ $message }}</span>
+                  @enderror
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label for="worker-rate" class="text-zinc-800 text-xs font-semibold">Hourly rate ($/hr)</label>
+                  <input id="worker-rate" name="hourly_rate" type="number" min="0" step="0.01" value="{{ old('hourly_rate', $handyman->hourly_rate) }}" class="min-h-11 px-3 border border-neutral-200 rounded-lg text-zinc-800 text-xs focus:outline-none focus:border-teal-800" />
+                  @error('hourly_rate')
+                    <span class="text-red-600 text-xs">{{ $message }}</span>
+                  @enderror
+                </div>
+              </div>
+
+              <button type="submit" class="self-start h-10 px-5 bg-teal-800 hover:bg-teal-900 transition-colors rounded-lg text-white text-xs font-semibold cursor-pointer shadow-xs">
+                Save profile
+              </button>
             </form>
             <div class="self-stretch p-5 bg-white rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 flex flex-col justify-start items-start gap-4 overflow-hidden">
               <div class="self-stretch inline-flex justify-between items-start overflow-hidden">
@@ -180,7 +247,7 @@
                 <div class="size-4 relative overflow-hidden">
                   <div class="w-2.5 h-2 left-[2.67px] top-[4px] absolute outline outline-[1.30px] outline-offset-[-0.65px] outline-teal-800"></div>
                 </div>
-                <div class="justify-start text-zinc-800 text-xs font-normal font-['Inter']">Profile photo added</div>
+                <div class="justify-start text-zinc-800 text-xs font-normal font-['Inter']">{{ $handyman->user->avatar ? 'Profile photo added' : 'Add a profile photo' }}</div>
               </div>
               <div class="size- inline-flex justify-start items-center gap-2 overflow-hidden">
                 <div class="size-4 relative overflow-hidden">
@@ -210,4 +277,24 @@
       </div>
     </div>
   </div>
+  <script>
+    function previewWorkerAvatar(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const fileNameEl = document.getElementById('avatar-file-name');
+      if (fileNameEl) {
+        fileNameEl.textContent = file.name;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById('worker-avatar-preview');
+        if (preview) preview.src = e.target.result;
+        const cardAvatar = document.getElementById('profile-card-avatar');
+        if (cardAvatar) cardAvatar.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
 </div>

@@ -9,7 +9,9 @@ use App\Models\Category;
 use App\Models\Handyman;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class WorkerWorkspaceTest extends TestCase
@@ -76,6 +78,46 @@ class WorkerWorkspaceTest extends TestCase
 
         $response->assertRedirect(route('worker.profile'))
             ->assertSessionHasErrors('hourly_rate');
+    }
+
+    public function test_worker_can_upload_profile_picture_and_it_is_stored_in_database(): void
+    {
+        Storage::fake('public');
+
+        $handyman = Handyman::factory()->create();
+        $avatarFile = UploadedFile::fake()->create('my-profile.jpg', 100, 'image/jpeg');
+
+        $response = $this->actingAs($handyman->user)->put(route('worker.profile.update'), [
+            'bio' => 'Experienced craftsman with proper tools.',
+            'hourly_rate' => 70,
+            'avatar' => $avatarFile,
+        ]);
+
+        $response->assertRedirect();
+
+        $user = $handyman->user->fresh();
+        $this->assertNotNull($user->avatar);
+        $this->assertStringStartsWith('avatars/', $user->avatar);
+        Storage::disk('public')->assertExists($user->avatar);
+        $this->assertNotNull($user->avatar_url);
+        $this->assertStringContainsString('storage/'.$user->avatar, $user->avatar_url);
+        $this->assertSame($user->avatar_url, $handyman->fresh()->avatar_url);
+    }
+
+    public function test_profile_update_validates_avatar_image_type(): void
+    {
+        Storage::fake('public');
+
+        $handyman = Handyman::factory()->create();
+        $invalidFile = UploadedFile::fake()->create('document.pdf', 100);
+
+        $response = $this->actingAs($handyman->user)->from(route('worker.profile'))->put(
+            route('worker.profile.update'),
+            ['avatar' => $invalidFile],
+        );
+
+        $response->assertRedirect(route('worker.profile'))
+            ->assertSessionHasErrors('avatar');
     }
 
     public function test_worker_can_accept_a_pending_booking(): void

@@ -24,12 +24,12 @@
   <div class="self-stretch min-h-[947px] px-20 pt-12 pb-16 inline-flex justify-start items-start gap-24 overflow-hidden">
     <div class="flex-1 px-7 inline-flex flex-col justify-start items-start gap-6 overflow-hidden">
       <div class="self-stretch p-[5px] bg-stone-200 rounded-xl inline-flex justify-start items-start gap-1.5 overflow-hidden">
-        <div class="flex-1 h-12 bg-stone-200 rounded-lg flex justify-center items-center gap-2 overflow-hidden">
+        <a href="{{ $mode === 'login' ? route('login') : route('customer.registration') }}" class="flex-1 h-12 bg-stone-200 hover:bg-stone-300 transition-colors rounded-lg flex justify-center items-center gap-2 overflow-hidden">
           <div class="size-4 relative overflow-hidden">
             <div class="size-3.5 left-[2.16px] top-[2.16px] absolute outline outline-[1.20px] outline-offset-[-0.60px] outline-neutral-500"></div>
           </div>
           <div class="justify-start text-neutral-500 text-xs font-normal font-['Inter']">I need a hand</div>
-        </div>
+        </a>
         <div class="flex-1 h-12 bg-white rounded-lg flex justify-center items-center gap-2 overflow-hidden">
           <div class="size-4 relative overflow-hidden">
             <div class="size-3.5 left-[2.16px] top-[2.16px] absolute outline outline-[1.20px] outline-offset-[-0.60px] outline-teal-800"></div>

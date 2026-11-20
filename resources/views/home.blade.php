@@ -598,7 +598,7 @@
                 </p>
                 <div class="flex flex-wrap items-center gap-5 pt-2">
                     <a
-                        href="#"
+                        href="{{ route('worker.sign-up') }}"
                         class="bg-[#ddeba9] hover:bg-[#cbe08e] transition-colors text-[#1e3329] h-[50px] px-6 rounded-[8px] flex items-center gap-2.5 text-[14px] font-semibold shadow-sm"
                     >
                         <span>Join as a handyman</span>

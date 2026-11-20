@@ -50,6 +50,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the accessible URL for the user's avatar.
+     */
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if (empty($this->avatar)) {
+            return null;
+        }
+
+        if (str_starts_with($this->avatar, 'http://') || str_starts_with($this->avatar, 'https://')) {
+            return $this->avatar;
+        }
+
+        return asset('storage/'.ltrim($this->avatar, '/'));
+    }
+
+    /**
      * The handyman profile linked to this user.
      */
     public function handyman(): HasOne

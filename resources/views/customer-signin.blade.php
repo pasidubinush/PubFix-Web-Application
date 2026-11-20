@@ -7,7 +7,7 @@
                     <img src="{{ asset('images/pubfix/816bf.svg') }}" alt="" class="size-[18px]" />
                     <span>I need a hand</span>
                 </div>
-                <a href="#" class="bg-[#ede9de] hover:bg-[#e4dfd2] transition-colors flex flex-1 h-[49px] items-center justify-center gap-2 rounded-[8px] text-[#69736b] text-[13px] font-normal">
+                <a href="{{ route('worker.sign-in') }}" class="bg-[#ede9de] hover:bg-[#e4dfd2] transition-colors flex flex-1 h-[49px] items-center justify-center gap-2 rounded-[8px] text-[#69736b] text-[13px] font-normal">
                     <img src="{{ asset('images/pubfix/b3a27.svg') }}" alt="" class="size-[18px]" />
                     <span>I’m a handyman</span>
                 </a>

@@ -30,8 +30,8 @@
             <!-- Links: For professionals -->
             <div class="md:col-span-3 flex flex-col gap-4 text-[12px]">
                 <h4 class="text-white font-semibold text-[13px] tracking-wide">For professionals</h4>
-                <a href="#" class="text-[#c2d2c7] hover:text-white transition-colors">Join as a pro</a>
-                <a href="#" class="text-[#c2d2c7] hover:text-white transition-colors">Pro resources</a>
+                <a href="{{ route('worker.sign-up') }}" class="text-[#c2d2c7] hover:text-white transition-colors">Join as a pro</a>
+                <a href="{{ route('worker.sign-in') }}" class="text-[#c2d2c7] hover:text-white transition-colors">Pro workspace</a>
                 <a href="#" class="text-[#c2d2c7] hover:text-white transition-colors">Community standards</a>
             </div>
 

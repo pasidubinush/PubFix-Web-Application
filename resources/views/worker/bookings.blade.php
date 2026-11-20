@@ -1,3 +1,4 @@
+<x-worker-layout title="PubFix · Job Requests">
 <div class="worker-page w-full max-w-[1440px] bg-stone-100 inline-flex flex-col justify-start items-start overflow-hidden">
   @include('worker.partials.navigation')
   <div class="self-stretch h-20 px-8 bg-white border-b border-neutral-200 inline-flex justify-between items-center overflow-hidden">

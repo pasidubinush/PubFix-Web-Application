@@ -251,4 +251,31 @@ class CustomerAuthAndLocationTest extends TestCase
 
         $this->assertEquals(BookingStatus::Cancelled, $booking->fresh()->status);
     }
+
+    public function test_auth_pages_link_to_handyman_pages_and_navbar_removes_join_as_pro(): void
+    {
+        // Customer sign-in page links to worker sign-in
+        $signInResponse = $this->get(route('login'));
+        $signInResponse->assertOk();
+        $signInResponse->assertSee(route('worker.sign-in'));
+        $signInResponse->assertDontSee('Join as a pro');
+
+        // Customer registration page links to worker sign-up
+        $signUpResponse = $this->get(route('customer.registration'));
+        $signUpResponse->assertOk();
+        $signUpResponse->assertSee(route('worker.sign-up'));
+        $signUpResponse->assertDontSee('Join as a pro');
+
+        // Home page does not display Join as a pro in top navbar
+        $homeResponse = $this->get(route('home'));
+        $homeResponse->assertOk();
+        $homeResponse->assertDontSee('<span>Join as a pro</span>', false);
+
+        // Handyman authenticated user sees Pro workspace in navbar
+        $handymanUser = User::factory()->create(['role' => UserRole::Handyman]);
+        $authedResponse = $this->actingAs($handymanUser)->get(route('home'));
+        $authedResponse->assertOk();
+        $authedResponse->assertSee(route('worker.dashboard'));
+        $authedResponse->assertSee('Pro workspace');
+    }
 }

@@ -8,7 +8,7 @@
                 <span>/</span>
                 <a href="{{ route('handymen.index') }}" class="hover:text-[#1e3329] transition-colors">Services</a>
                 <span>/</span>
-                <span id="breadcrumb-service" class="text-[#1e3329] font-medium">Furniture assembly</span>
+                <span id="breadcrumb-service" class="text-[#1e3329] font-medium">{{ request('service', 'Find a Handyman') }}</span>
             </nav>
 
             <!-- Results Headline -->
@@ -18,7 +18,7 @@
                         Good with flat-packs. Great with people.
                     </h1>
                     <p class="text-[#69736b] text-[15px]">
-                        Trusted furniture assembly pros, right here in Austin.
+                        Trusted local pros, right here in Austin.
                     </p>
                 </div>
 
@@ -44,7 +44,7 @@
                             id="service-search-page"
                             type="text"
                             name="service"
-                            value="Furniture assembly"
+                            value="{{ request('service', '') }}"
                             placeholder="Try “furniture assembly”"
                             class="text-[15px] text-[#1e3329] font-medium placeholder:text-[#69736b] bg-transparent outline-none w-full"
                         />
@@ -115,57 +115,83 @@
                 <div class="flex flex-col gap-3.5">
                     <span class="text-[#1e3329] text-[13px] font-medium">Service</span>
 
-                    <!-- Furniture assembly -->
-                    <label class="flex items-center gap-2.5 cursor-pointer select-none group">
-                        <input
-                            type="checkbox"
-                            id="chk-service-assembly"
-                            class="sr-only peer"
-                            checked
-                            onchange="onServiceChange('furniture-assembly', this.checked)"
-                        />
-                        <span class="size-4 rounded-[4px] border border-[#dfe3d9] bg-white peer-checked:bg-[#25664d] peer-checked:border-[#25664d] flex items-center justify-center shrink-0 transition-colors shadow-2xs">
-                            <svg class="size-[11px] text-white hidden peer-checked:block pointer-events-none" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="2.5 6 5 8.5 9.5 3.5"></polyline>
-                            </svg>
-                        </span>
-                        <span class="text-[#1e3329] text-[13px] flex-1 group-hover:text-[#25664d] transition-colors">Furniture assembly</span>
-                        <span id="count-service-assembly" class="text-[#69736b] text-[11px]">8</span>
-                    </label>
+                    @if(isset($categories) && $categories->isNotEmpty())
+                        @foreach($categories as $category)
+                            @php
+                                $slug = \Illuminate\Support\Str::slug($category->name);
+                            @endphp
+                            <label class="flex items-center gap-2.5 cursor-pointer select-none group">
+                                <input
+                                    type="checkbox"
+                                    id="chk-service-{{ $slug }}"
+                                    class="sr-only peer service-chk"
+                                    data-slug="{{ $slug }}"
+                                    onchange="onServiceChange('{{ $slug }}', this.checked)"
+                                />
+                                <span class="size-4 rounded-[4px] border border-[#dfe3d9] bg-white peer-checked:bg-[#25664d] peer-checked:border-[#25664d] flex items-center justify-center shrink-0 transition-colors shadow-2xs">
+                                    <svg class="size-[11px] text-white hidden peer-checked:block pointer-events-none" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="2.5 6 5 8.5 9.5 3.5"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="text-[#1e3329] text-[13px] flex-1 group-hover:text-[#25664d] transition-colors">{{ $category->name }}</span>
+                                <span id="count-service-{{ $slug }}" class="text-[#69736b] text-[11px]">{{ $category->handymen_count }}</span>
+                            </label>
+                        @endforeach
+                    @else
+                        <!-- Furniture assembly -->
+                        <label class="flex items-center gap-2.5 cursor-pointer select-none group">
+                            <input
+                                type="checkbox"
+                                id="chk-service-furniture-assembly"
+                                class="sr-only peer service-chk"
+                                data-slug="furniture-assembly"
+                                onchange="onServiceChange('furniture-assembly', this.checked)"
+                            />
+                            <span class="size-4 rounded-[4px] border border-[#dfe3d9] bg-white peer-checked:bg-[#25664d] peer-checked:border-[#25664d] flex items-center justify-center shrink-0 transition-colors shadow-2xs">
+                                <svg class="size-[11px] text-white hidden peer-checked:block pointer-events-none" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="2.5 6 5 8.5 9.5 3.5"></polyline>
+                                </svg>
+                            </span>
+                            <span class="text-[#1e3329] text-[13px] flex-1 group-hover:text-[#25664d] transition-colors">Furniture assembly</span>
+                            <span id="count-service-furniture-assembly" class="text-[#69736b] text-[11px]">8</span>
+                        </label>
 
-                    <!-- Carpentry -->
-                    <label class="flex items-center gap-2.5 cursor-pointer select-none group">
-                        <input
-                            type="checkbox"
-                            id="chk-service-carpentry"
-                            class="sr-only peer"
-                            onchange="onServiceChange('carpentry', this.checked)"
-                        />
-                        <span class="size-4 rounded-[4px] border border-[#dfe3d9] bg-white peer-checked:bg-[#25664d] peer-checked:border-[#25664d] flex items-center justify-center shrink-0 transition-colors shadow-2xs">
-                            <svg class="size-[11px] text-white hidden peer-checked:block pointer-events-none" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="2.5 6 5 8.5 9.5 3.5"></polyline>
-                            </svg>
-                        </span>
-                        <span class="text-[#1e3329] text-[13px] flex-1 group-hover:text-[#25664d] transition-colors">Carpentry</span>
-                        <span id="count-service-carpentry" class="text-[#69736b] text-[11px]">6</span>
-                    </label>
+                        <!-- Carpentry -->
+                        <label class="flex items-center gap-2.5 cursor-pointer select-none group">
+                            <input
+                                type="checkbox"
+                                id="chk-service-carpentry"
+                                class="sr-only peer service-chk"
+                                data-slug="carpentry"
+                                onchange="onServiceChange('carpentry', this.checked)"
+                            />
+                            <span class="size-4 rounded-[4px] border border-[#dfe3d9] bg-white peer-checked:bg-[#25664d] peer-checked:border-[#25664d] flex items-center justify-center shrink-0 transition-colors shadow-2xs">
+                                <svg class="size-[11px] text-white hidden peer-checked:block pointer-events-none" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="2.5 6 5 8.5 9.5 3.5"></polyline>
+                                </svg>
+                            </span>
+                            <span class="text-[#1e3329] text-[13px] flex-1 group-hover:text-[#25664d] transition-colors">Carpentry</span>
+                            <span id="count-service-carpentry" class="text-[#69736b] text-[11px]">6</span>
+                        </label>
 
-                    <!-- General repairs -->
-                    <label class="flex items-center gap-2.5 cursor-pointer select-none group">
-                        <input
-                            type="checkbox"
-                            id="chk-service-repairs"
-                            class="sr-only peer"
-                            onchange="onServiceChange('general-repairs', this.checked)"
-                        />
-                        <span class="size-4 rounded-[4px] border border-[#dfe3d9] bg-white peer-checked:bg-[#25664d] peer-checked:border-[#25664d] flex items-center justify-center shrink-0 transition-colors shadow-2xs">
-                            <svg class="size-[11px] text-white hidden peer-checked:block pointer-events-none" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="2.5 6 5 8.5 9.5 3.5"></polyline>
-                            </svg>
-                        </span>
-                        <span class="text-[#1e3329] text-[13px] flex-1 group-hover:text-[#25664d] transition-colors">General repairs</span>
-                        <span id="count-service-repairs" class="text-[#69736b] text-[11px]">6</span>
-                    </label>
+                        <!-- General repairs -->
+                        <label class="flex items-center gap-2.5 cursor-pointer select-none group">
+                            <input
+                                type="checkbox"
+                                id="chk-service-general-repairs"
+                                class="sr-only peer service-chk"
+                                data-slug="general-repairs"
+                                onchange="onServiceChange('general-repairs', this.checked)"
+                            />
+                            <span class="size-4 rounded-[4px] border border-[#dfe3d9] bg-white peer-checked:bg-[#25664d] peer-checked:border-[#25664d] flex items-center justify-center shrink-0 transition-colors shadow-2xs">
+                                <svg class="size-[11px] text-white hidden peer-checked:block pointer-events-none" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="2.5 6 5 8.5 9.5 3.5"></polyline>
+                                </svg>
+                            </span>
+                            <span class="text-[#1e3329] text-[13px] flex-1 group-hover:text-[#25664d] transition-colors">General repairs</span>
+                            <span id="count-service-general-repairs" class="text-[#69736b] text-[11px]">6</span>
+                        </label>
+                    @endif
                 </div>
 
                 <div class="h-px bg-[#dfe3d9]"></div>
@@ -541,8 +567,11 @@
 
     <!-- Client-side Interactive Logic -->
     <script>
-        // Handymen Dataset matching the Figma Austin area
-        const HANDYMEN_DATA = [
+        // Real Handymen from Database
+        const DB_HANDYMEN = @json($handymenData ?? []);
+
+        // Fallback Dummy Dataset matching the Figma Austin area (used when database has no workers)
+        const DUMMY_HANDYMEN = [
             {
                 id: 1,
                 name: 'Marcus Reed',
@@ -749,18 +778,25 @@
             }
         ];
 
+        // Use real database records if available, otherwise fallback to dummy dataset
+        const HANDYMEN_DATA = (Array.isArray(DB_HANDYMEN) && DB_HANDYMEN.length > 0)
+            ? DB_HANDYMEN
+            : DUMMY_HANDYMEN;
+
+        const hasRealData = (Array.isArray(DB_HANDYMEN) && DB_HANDYMEN.length > 0);
+
         // Filter State
         const state = {
-            services: ['furniture-assembly'],
+            services: [],
             availability: ['any-time'],
-            minRate: 30,
-            maxRate: 100,
-            minRating: 4.5,
-            searchQuery: 'Furniture assembly',
+            minRate: 0,
+            maxRate: 500,
+            minRating: 0,
+            searchQuery: '',
             zipCode: '78704',
             sortBy: 'recommended',
             page: 1,
-            pageSize: 3,
+            pageSize: 6,
             savedIds: new Set()
         };
 
@@ -768,18 +804,29 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Read query parameters if present
             const params = new URLSearchParams(window.location.search);
-            if (params.has('service')) {
-                const s = params.get('service').toLowerCase();
-                if (s.includes('carpentry')) state.services = ['carpentry'];
-                else if (s.includes('plumb') || s.includes('repair')) state.services = ['general-repairs'];
-                else state.services = ['furniture-assembly'];
-                state.searchQuery = params.get('service');
-                document.getElementById('service-search-page').value = params.get('service');
+            if (params.has('service') && params.get('service').trim() !== '') {
+                const s = params.get('service').toLowerCase().trim();
+                state.searchQuery = params.get('service').trim();
+                const serviceInput = document.getElementById('service-search-page');
+                if (serviceInput) serviceInput.value = state.searchQuery;
+
+                // Match category slug
+                const matched = HANDYMEN_DATA.find(p => p.category && p.category.toLowerCase().includes(s));
+                if (matched && matched.services && matched.services.length > 0) {
+                    state.services = [matched.services[0]];
+                }
             }
-            if (params.has('zip')) {
-                state.zipCode = params.get('zip');
-                document.getElementById('zip-code-page').value = params.get('zip');
+            if (params.has('zip') && params.get('zip').trim() !== '') {
+                state.zipCode = params.get('zip').trim();
+                const zipInput = document.getElementById('zip-code-page');
+                if (zipInput) zipInput.value = state.zipCode;
             }
+
+            // Sync service checkboxes
+            state.services.forEach(slug => {
+                const chk = document.getElementById(`chk-service-${slug}`);
+                if (chk) chk.checked = true;
+            });
 
             syncFilterCheckboxes();
             updateSliderDisplay();
@@ -853,19 +900,26 @@
         // Synchronize Checkbox DOM UI styles
         function syncFilterCheckboxes() {
             // Services
-            document.getElementById('chk-service-assembly').checked = state.services.includes('furniture-assembly');
-            document.getElementById('chk-service-carpentry').checked = state.services.includes('carpentry');
-            document.getElementById('chk-service-repairs').checked = state.services.includes('general-repairs');
+            document.querySelectorAll('.service-chk').forEach(chk => {
+                const slug = chk.getAttribute('data-slug') || chk.id.replace('chk-service-', '');
+                chk.checked = state.services.includes(slug);
+            });
 
             // Availability
-            document.getElementById('chk-avail-any').checked = state.availability.includes('any-time');
-            document.getElementById('chk-avail-today').checked = state.availability.includes('today');
-            document.getElementById('chk-avail-tomorrow').checked = state.availability.includes('tomorrow');
-            document.getElementById('chk-avail-weekend').checked = state.availability.includes('this-weekend');
+            const chkAny = document.getElementById('chk-avail-any');
+            if (chkAny) chkAny.checked = state.availability.includes('any-time');
+            const chkToday = document.getElementById('chk-avail-today');
+            if (chkToday) chkToday.checked = state.availability.includes('today');
+            const chkTom = document.getElementById('chk-avail-tomorrow');
+            if (chkTom) chkTom.checked = state.availability.includes('tomorrow');
+            const chkWeekend = document.getElementById('chk-avail-weekend');
+            if (chkWeekend) chkWeekend.checked = state.availability.includes('this-weekend');
 
             // Ratings
-            document.getElementById('chk-rating-45').checked = state.minRating === 4.5;
-            document.getElementById('chk-rating-40').checked = state.minRating === 4.0;
+            const chk45 = document.getElementById('chk-rating-45');
+            if (chk45) chk45.checked = state.minRating === 4.5;
+            const chk40 = document.getElementById('chk-rating-40');
+            if (chk40) chk40.checked = state.minRating === 4.0;
         }
 
         // Dual Range Slider Handling
@@ -954,15 +1008,17 @@
         function resetAllFilters() {
             state.services = [];
             state.availability = ['any-time'];
-            state.minRate = 30;
-            state.maxRate = 100;
+            state.minRate = 0;
+            state.maxRate = 500;
             state.minRating = 0;
             state.searchQuery = '';
             state.sortBy = 'recommended';
             state.page = 1;
 
-            document.getElementById('service-search-page').value = '';
-            document.getElementById('sort-selected-label').textContent = 'Recommended';
+            const serviceInput = document.getElementById('service-search-page');
+            if (serviceInput) serviceInput.value = '';
+            const sortLabel = document.getElementById('sort-selected-label');
+            if (sortLabel) sortLabel.textContent = 'Recommended';
 
             syncFilterCheckboxes();
             updateSliderDisplay();
@@ -1127,7 +1183,7 @@
                             </div>
                             <button
                                 type="button"
-                                onclick="openBookingModal('${pro.name}', '$${pro.rate} / hr', '${pro.availableText}')"
+                                onclick="openBookingModal('${(pro.name || 'Handyman').replace(/'/g, "\\'")}', '$${pro.rate} / hr', '${(pro.availableText || '').replace(/'/g, "\\'")}', ${pro.id})"
                                 class="bg-[#25664d] hover:bg-[#1e523e] transition-colors text-white h-[50px] w-full rounded-[8px] flex items-center justify-center text-[14px] font-semibold shadow-sm cursor-pointer"
                             >
                                 Request a job
@@ -1154,24 +1210,14 @@
             let chipsHtml = '';
 
             // Service chips
-            if (state.services.includes('furniture-assembly')) {
-                chipsHtml += createChip('Furniture assembly', () => {
-                    document.getElementById('chk-service-assembly').checked = false;
-                    onServiceChange('furniture-assembly', false);
+            state.services.forEach(slug => {
+                const label = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                chipsHtml += createChip(label, () => {
+                    const chk = document.getElementById(`chk-service-${slug}`);
+                    if (chk) chk.checked = false;
+                    onServiceChange(slug, false);
                 });
-            }
-            if (state.services.includes('carpentry')) {
-                chipsHtml += createChip('Carpentry', () => {
-                    document.getElementById('chk-service-carpentry').checked = false;
-                    onServiceChange('carpentry', false);
-                });
-            }
-            if (state.services.includes('general-repairs')) {
-                chipsHtml += createChip('General repairs', () => {
-                    document.getElementById('chk-service-repairs').checked = false;
-                    onServiceChange('general-repairs', false);
-                });
-            }
+            });
 
             // Rating chip
             if (state.minRating > 0) {

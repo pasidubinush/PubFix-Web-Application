@@ -77,4 +77,12 @@ class Handyman extends Model
     {
         return $this->bookings()->where('status', 'completed')->count();
     }
+
+    /**
+     * Get the avatar URL from the linked user.
+     */
+    public function getAvatarUrlAttribute(): ?string
+    {
+        return $this->user?->avatar_url;
+    }
 }

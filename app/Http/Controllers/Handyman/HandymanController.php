@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Handyman;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class HandymanController extends Controller
@@ -95,6 +96,7 @@ class HandymanController extends Controller
                     'available' => (bool) $pro->available,
                     'rating' => round((float) ($pro->reviews_avg_rating ?? 5.0), 1),
                     'reviews' => (int) $pro->reviews_count,
+                    'image' => $pro->user?->avatar_url,
                 ];
             });
 
@@ -109,6 +111,66 @@ class HandymanController extends Controller
         $handymen = $query->paginate(9)->withQueryString();
         $categories = Category::withCount('handymen')->orderByDesc('handymen_count')->get();
 
-        return view('find-handyman', compact('handymen', 'categories', 'zipInput'));
+        $defaultImages = [
+            asset('images/pubfix/52409.png'),
+            asset('images/pubfix/c4ce0.png'),
+            asset('images/pubfix/26789.png'),
+            asset('images/pubfix/d12cc.png'),
+            asset('images/pubfix/c42be.png'),
+            asset('images/pubfix/ddb51.png'),
+        ];
+
+        // Format all database handymen for client-side interactive rendering
+        $dbHandymen = Handyman::query()
+            ->with(['user', 'category', 'reviews'])
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->latest()
+            ->get();
+
+        $handymenData = $dbHandymen->map(function (Handyman $pro, int $index) use ($defaultImages) {
+            $categoryName = $pro->category->name ?? 'General repairs';
+            $categorySlug = Str::slug($categoryName);
+
+            $avatar = $pro->user?->avatar_url ?: $defaultImages[$index % count($defaultImages)];
+            $rating = round((float) ($pro->reviews_avg_rating ?? ($pro->reviews()->avg('rating') ?: 5.0)), 1);
+            $reviewsCount = (int) ($pro->reviews_count ?? $pro->reviews()->count());
+            $completedJobs = $pro->completedJobsCount();
+
+            $services = [$categorySlug];
+            if ($categorySlug === 'furniture-assembly') {
+                $services[] = 'carpentry';
+            } elseif ($categorySlug === 'carpentry') {
+                $services[] = 'furniture-assembly';
+            } else {
+                $services[] = 'general-repairs';
+            }
+
+            $skills = array_filter([
+                $categoryName,
+                'Repairs',
+                'Maintenance',
+            ]);
+
+            return [
+                'id' => $pro->id,
+                'name' => $pro->user?->name ?? 'Professional Handyman',
+                'category' => $categoryName,
+                'services' => array_values(array_unique($services)),
+                'availability' => $pro->available ? ['any-time', 'today', 'tomorrow', 'this-weekend'] : [],
+                'availableText' => $pro->available ? 'Today, from 9:00 AM' : 'Currently unavailable',
+                'rating' => $rating > 0 ? $rating : 5.0,
+                'reviews' => $reviewsCount,
+                'jobs' => $completedJobs > 0 ? $completedJobs : max(1, $reviewsCount * 2),
+                'distance' => rand(2, 5),
+                'neighborhood' => $pro->city ?: 'Austin',
+                'rate' => (float) $pro->hourly_rate,
+                'bio' => $pro->bio ?: 'Experienced local professional dedicated to reliable, tidy work.',
+                'skills' => array_values($skills),
+                'image' => $avatar,
+            ];
+        })->values()->all();
+
+        return view('find-handyman', compact('handymen', 'categories', 'zipInput', 'handymenData'));
     }
 }
